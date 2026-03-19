@@ -1,26 +1,141 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Surface Tokens — Elevated Dark Mode (High Contrast) */
+    --color-surface-0: oklch(14% 0.008 240);
+    /* ~#0d1017 — base background */
+    --color-surface-1: oklch(17% 0.008 240);
+    /* ~#131720 — sidebar, panels */
+    --color-surface-2: oklch(20% 0.008 240);
+    /* ~#191f2a — cards, inputs */
+    --color-surface-3: oklch(24% 0.008 240);
+    /* ~#212838 — card hover, elevated */
+    --color-surface-4: oklch(28% 0.008 240);
+    /* ~#2a3248 — selected, active */
+  
+    /* Text Tokens — WCAG AA Compliant */
+    --color-text-1: #ECEEF4;
+    /* Primary — ratio ~14:1 ✅ */
+    --color-text-2: #B0B7C9;
+    /* Secondary — ratio ~8:1 ✅ */
+    --color-text-3: #8B93A8;
+    /* Tertiary — ratio ~4.6:1 ✅ WCAG AA */
+  
+    /* Accent Colors */
+    --color-accent-blue: #3B82F6;
+    --color-accent-orange: #F97316;
+    --color-accent-violet: #8B5CF6;
+    --color-accent-amber: #F59E0B;
+      /* SIS Gold/Amber */
+  
+    /* Semantic Colors */
+    --color-success: #2DD4A8;
+    --color-info: #0EA5E9;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+  
+    /* Font overrides */
+    --font-sans: "Inter", var(--font-geist-sans);
+    --font-mono: "JetBrains Mono", var(--font-geist-mono);
+    /* Animation Easings */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: var(--color-surface-0);
+    --foreground: var(--color-text-1);
 }
 
+html,
+body {
+  overflow: hidden;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* Global Aurora Mesh Background */
+  .aurora-mesh {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(circle at 10% 90%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 90% 10%, rgba(245, 158, 11, 0.10) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
+      var(--color-surface-0);
+    transition: all 1.5s var(--ease-out-expo);
+  }
+  
+  /* Theme Variations — Stronger Aurora */
+  .theme-dtic .aurora-mesh {
+    background:
+      radial-gradient(circle at 15% 85%, rgba(59, 130, 246, 0.20) 0%, transparent 50%),
+      radial-gradient(circle at 85% 15%, rgba(99, 102, 241, 0.10) 0%, transparent 40%),
+      var(--color-surface-0);
+  }
+  
+  .theme-manutencao .aurora-mesh {
+    background:
+      radial-gradient(circle at 15% 85%, rgba(249, 115, 22, 0.18) 0%, transparent 50%),
+      radial-gradient(circle at 85% 15%, rgba(251, 191, 36, 0.08) 0%, transparent 40%),
+      var(--color-surface-0);
+  }
+  
+  .theme-memoria .aurora-mesh {
+    background:
+      radial-gradient(circle at 10% 90%, rgba(139, 92, 246, 0.18) 0%, transparent 50%),
+      radial-gradient(circle at 90% 10%, rgba(212, 165, 116, 0.07) 0%, transparent 40%),
+      var(--color-surface-0);
+  }
+  
+  
+  /* Glassmorphism Helper */
+  .glass {
+    background: rgba(14, 16, 24, 0.60);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3); /* slate-900 / 30% */
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.6); /* slate-700 / 60% */
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.8); /* slate-600 / 80% */
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(51, 65, 85, 0.6) rgba(15, 23, 42, 0.3);
+}
+
+/* Hide scrollbar while preserving scroll behavior */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
