@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -27,6 +30,9 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.0",
+    "jsdom": "^26.1.0",
+    "vitest": "^2.1.9",
+    "@testing-library/react": "^16.3.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
