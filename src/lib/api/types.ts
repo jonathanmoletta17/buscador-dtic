@@ -1,10 +1,14 @@
-/**
+﻿/**
  * Tipos compartilhados para dados do GLPI.
  */
 
 import type { IsoDateTimeString } from "@/lib/datetime/iso";
 
-// Status GLPI → labels legíveis
+export type TicketUniverse = "active" | "historical";
+export type TicketSearchDepth = "basic" | "expanded";
+export type TicketMatchSource = "title" | "content" | "followup" | "task" | "solution";
+
+// Status GLPI -> labels legiveis
 export const TICKET_STATUS_MAP: Record<number, string> = {
   1: "Novo",
   2: "Em Atendimento",
@@ -17,7 +21,7 @@ export const TICKET_STATUS_MAP: Record<number, string> = {
 export const TICKET_URGENCY_MAP: Record<number, string> = {
   1: "Muito Baixa",
   2: "Baixa",
-  3: "Média",
+  3: "Media",
   4: "Alta",
   5: "Muito Alta",
 };
@@ -28,6 +32,7 @@ export interface TicketSummary {
   title: string;
   content: string;
   category: string;
+  categoryId?: number;
   status: string;
   statusId: number;
   urgency: string;
@@ -39,8 +44,15 @@ export interface TicketSummary {
   requester?: string;
   technician?: string;
   groupName?: string;
+  requestType?: string;
+  requestTypeId?: number;
   entityName?: string;
+  entityId?: number;
   entity_name?: string;
+  location?: string;
+  locationId?: number;
+  matchSource?: TicketMatchSource;
+  matchExcerpt?: string;
   slaTime?: string;
 }
 
@@ -63,10 +75,26 @@ export interface TicketStats {
   new: number;
   inProgress: number;     // status 2 + 3 (Em Atendimento + Planejado)
   pending: number;
-  solved: number;         // total histórico
-  solvedRecent: number;   // últimos 30 dias
-  total: number;          // tickets não-fechados (1-5)
+  solved: number;
+  closed: number;
+  solvedRecent: number;   // ultimos 30 dias
+  total: number;
   totalOpen: number;      // tickets abertos (1-4)
+}
+
+export interface TicketFilterOption {
+  id: number;
+  label: string;
+  total: number;
+}
+
+export interface TicketFilterOptions {
+  requestTypes: TicketFilterOption[];
+  entities: TicketFilterOption[];
+  categories: TicketFilterOption[];
+  locations: TicketFilterOption[];
+  groups: TicketFilterOption[];
+  technicians: TicketFilterOption[];
 }
 
 // Resposta bruta do GLPI Search API (campo IDs)

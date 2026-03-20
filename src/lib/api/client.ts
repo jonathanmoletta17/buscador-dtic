@@ -82,8 +82,15 @@ export async function request<TResponse>(
   }
 }
 
-export function apiGet<T>(path: string, params?: QueryParams): Promise<T> {
-  return request<T>(withQuery(path, params));
+export function apiGet<T>(
+  path: string,
+  params?: QueryParams,
+  init?: Omit<RequestInit, "method" | "body">,
+): Promise<T> {
+  return request<T>(withQuery(path, params), {
+    ...init,
+    method: "GET",
+  });
 }
 
 export function apiPost<TResponse, TBody = unknown>(

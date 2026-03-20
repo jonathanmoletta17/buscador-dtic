@@ -1,7 +1,14 @@
-import { asIsoDateTimeString, toIsoDateTimeOrUndefined } from "@/lib/datetime/iso";
+﻿import { asIsoDateTimeString, toIsoDateTimeOrUndefined } from "@/lib/datetime/iso";
 
-import type { TicketListItemDto, TicketListResponseDto, TicketSearchItemDto, TicketSearchResponseDto, TicketStatsDto } from "../contracts/tickets";
-import type { FollowUp, TicketDetail, TicketStats, TicketSummary } from "../types";
+import type {
+  TicketFilterOptionsResponseDto,
+  TicketListItemDto,
+  TicketListResponseDto,
+  TicketSearchItemDto,
+  TicketSearchResponseDto,
+  TicketStatsDto,
+} from "../contracts/tickets";
+import type { FollowUp, TicketDetail, TicketFilterOptions, TicketStats, TicketSummary } from "../types";
 
 type GlpiTicketDto = Record<string, unknown>;
 type GlpiFollowupDto = Record<string, unknown>;
@@ -39,6 +46,7 @@ export function mapTicketStatsDto(dto: TicketStatsDto): TicketStats {
     inProgress: dto.em_atendimento ?? 0,
     pending: dto.pendentes ?? 0,
     solved: dto.solucionados ?? 0,
+    closed: dto.fechados ?? 0,
     solvedRecent: dto.solucionados_recentes ?? 0,
     totalOpen: dto.total_abertos ?? 0,
     total: dto.total ?? 0,
@@ -46,14 +54,15 @@ export function mapTicketStatsDto(dto: TicketStatsDto): TicketStats {
 }
 
 export function mapTicketSummaryDto(dto: TicketListItemDto | TicketSearchItemDto): TicketSummary {
-  const entityName = "entity" in dto ? dto.entity : undefined;
-  const groupName = "group" in dto ? dto.group : undefined;
+  const entityName = dto.entity;
+  const groupName = dto.group;
 
   return {
     id: dto.id,
-    title: stripHtml(dto.title || "Sem título"),
+    title: stripHtml(dto.title || "Sem titulo"),
     content: stripHtml(dto.content || ""),
     category: dto.category || "Sem categoria",
+    categoryId: dto.categoryId,
     status: dto.status || "",
     statusId: dto.statusId || 0,
     urgency: dto.urgency || "",
@@ -65,8 +74,15 @@ export function mapTicketSummaryDto(dto: TicketListItemDto | TicketSearchItemDto
     requester: dto.requester,
     technician: dto.technician,
     groupName,
+    requestType: dto.requestType,
+    requestTypeId: dto.requestTypeId,
     entityName,
+    entityId: dto.entityId,
     entity_name: entityName,
+    location: dto.location,
+    locationId: dto.locationId,
+    matchSource: "matchSource" in dto ? dto.matchSource : undefined,
+    matchExcerpt: "matchExcerpt" in dto ? stripHtml(dto.matchExcerpt || "") : undefined,
   };
 }
 
@@ -84,6 +100,17 @@ export function mapTicketSearchResponseDto(dto: TicketSearchResponseDto): { tota
   };
 }
 
+export function mapTicketFilterOptionsResponseDto(dto: TicketFilterOptionsResponseDto): TicketFilterOptions {
+  return {
+    requestTypes: dto.requestTypes || [],
+    entities: dto.entities || [],
+    categories: dto.categories || [],
+    locations: dto.locations || [],
+    groups: dto.groups || [],
+    technicians: dto.technicians || [],
+  };
+}
+
 export function mapGlpiTicketDetail(rawData: GlpiTicketDto, rawFollowupsData: unknown[]): {
   ticket: TicketDetail;
   followups: FollowUp[];
@@ -94,12 +121,12 @@ export function mapGlpiTicketDetail(rawData: GlpiTicketDto, rawFollowupsData: un
 
   const ticket: TicketDetail = {
     id: getNumber(rawData.id),
-    title: getString(rawData.name, "Sem título"),
+    title: getString(rawData.name, "Sem titulo"),
     content: stripHtml(getString(rawData.content)),
     category: getString(rawData.itilcategories_id_completename) || getString(rawData.itilcategories_id, "Sem categoria"),
     status: getString(rawData.status_completename) || `Status ${statusId}`,
     statusId,
-    urgency: getString(rawData.urgency_name) || `Urgência ${urgencyId}`,
+    urgency: getString(rawData.urgency_name) || `Urgencia ${urgencyId}`,
     urgencyId,
     dateCreated: asIsoDateTimeString(getString(rawData.date)),
     dateModified: asIsoDateTimeString(getString(rawData.date_mod)),

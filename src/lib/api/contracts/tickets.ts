@@ -1,10 +1,15 @@
 import type { IsoDateTimeString } from "@/lib/datetime/iso";
 
+export type TicketUniverseDto = "active" | "historical";
+export type TicketSearchDepthDto = "basic" | "expanded";
+export type TicketMatchSourceDto = "title" | "content" | "followup" | "task" | "solution";
+
 export interface TicketStatsDto {
   novos?: number;
   em_atendimento?: number;
   pendentes?: number;
   solucionados?: number;
+  fechados?: number;
   solucionados_recentes?: number;
   total_abertos?: number;
   total?: number;
@@ -14,6 +19,7 @@ export interface TicketListItemDto {
   id: number;
   title: string;
   content: string;
+  categoryId?: number;
   statusId: number;
   status: string;
   urgencyId: number;
@@ -26,6 +32,13 @@ export interface TicketListItemDto {
   requester?: string;
   technician?: string;
   category: string;
+  entity?: string;
+  entityId?: number;
+  group?: string;
+  requestType?: string;
+  requestTypeId?: number;
+  location?: string;
+  locationId?: number;
 }
 
 export interface TicketListResponseDto {
@@ -37,9 +50,9 @@ export interface TicketListResponseDto {
 }
 
 export interface TicketSearchItemDto extends TicketListItemDto {
-  entity?: string;
-  group?: string;
   relevance: number;
+  matchSource?: TicketMatchSourceDto;
+  matchExcerpt?: string;
 }
 
 export interface TicketSearchResponseDto {
@@ -48,4 +61,19 @@ export interface TicketSearchResponseDto {
   context: string;
   department?: string | null;
   data: TicketSearchItemDto[];
+}
+
+export interface TicketFilterOptionDto {
+  id: number;
+  label: string;
+  total: number;
+}
+
+export interface TicketFilterOptionsResponseDto {
+  requestTypes: TicketFilterOptionDto[];
+  entities: TicketFilterOptionDto[];
+  categories: TicketFilterOptionDto[];
+  locations: TicketFilterOptionDto[];
+  groups: TicketFilterOptionDto[];
+  technicians: TicketFilterOptionDto[];
 }

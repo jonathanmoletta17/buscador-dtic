@@ -11,6 +11,10 @@ const envSchema = z.object({
   GLPI_DB_POOL_LIMIT: z.coerce.number().int().positive().default(10),
   APP_CONTEXT_ROOT: z.string().default("dtic"),
   APP_CATEGORY_FILTER: z.string().optional(),
+  APP_CATEGORY_ROOT_ID: z.preprocess(
+    (value) => (value === "" || value === undefined ? undefined : value),
+    z.coerce.number().int().positive().optional()
+  ),
   APP_DB_TIMEZONE: z.string().default("-03:00"),
 });
 
@@ -23,6 +27,7 @@ export interface AppDbConfig {
   poolLimit: number;
   contextRoot: string;
   categoryFilter?: string;
+  categoryRootId?: number;
   timezone: string;
 }
 
@@ -51,6 +56,7 @@ export function getAppDbConfig(): AppDbConfig {
     poolLimit: env.GLPI_DB_POOL_LIMIT,
     contextRoot: env.APP_CONTEXT_ROOT.trim().toLowerCase(),
     categoryFilter: env.APP_CATEGORY_FILTER?.trim() || undefined,
+    categoryRootId: env.APP_CATEGORY_ROOT_ID,
     timezone: env.APP_DB_TIMEZONE.trim(),
   };
 

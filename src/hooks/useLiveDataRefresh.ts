@@ -15,6 +15,7 @@ interface UseLiveDataRefreshOptions {
   enabled?: boolean;
   pollIntervalMs?: number;
   minRefreshGapMs?: number;
+  pauseWhenHidden?: boolean;
 }
 
 function isPromiseLike(value: unknown): value is PromiseLike<unknown> {
@@ -28,6 +29,7 @@ export function useLiveDataRefresh({
   enabled = true,
   pollIntervalMs = 0,
   minRefreshGapMs = 500,
+  pauseWhenHidden = true,
 }: UseLiveDataRefreshOptions): void {
   const onRefreshRef = useRef(onRefresh);
   const lastRunRef = useRef(0);
@@ -54,6 +56,9 @@ export function useLiveDataRefresh({
 
     const enqueueRefresh = () => {
       if (disposed) {
+        return;
+      }
+      if (pauseWhenHidden && document.visibilityState !== "visible") {
         return;
       }
 
@@ -124,11 +129,24 @@ export function useLiveDataRefresh({
         }, pollIntervalMs)
       : null;
 
+    const visibilityListener = () => {
+      if (document.visibilityState !== "visible") {
+        return;
+      }
+      enqueueRefresh();
+    };
+    if (pauseWhenHidden) {
+      document.addEventListener("visibilitychange", visibilityListener);
+    }
+
     return () => {
       disposed = true;
       unsubscribe();
       if (pollTimer) {
         window.clearInterval(pollTimer);
+      }
+      if (pauseWhenHidden) {
+        document.removeEventListener("visibilitychange", visibilityListener);
       }
       if (timeoutRef.current !== null) {
         window.clearTimeout(timeoutRef.current);
@@ -137,5 +155,5 @@ export function useLiveDataRefresh({
       refreshInFlightRef.current = false;
       refreshQueuedRef.current = false;
     };
-  }, [context, domainKey, domainSet, enabled, minRefreshGapMs, pollIntervalMs]);
+  }, [context, domainKey, domainSet, enabled, minRefreshGapMs, pauseWhenHidden, pollIntervalMs]);
 }

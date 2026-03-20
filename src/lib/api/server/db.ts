@@ -28,15 +28,9 @@ function createPool(): Pool {
 }
 
 export function getDbPool(): Pool {
-  if (globalThis.__glpiPool) {
-    return globalThis.__glpiPool;
+  if (!globalThis.__glpiPool) {
+    globalThis.__glpiPool = createPool();
   }
 
-  const pool = createPool();
-
-  if (process.env.NODE_ENV !== "production") {
-    globalThis.__glpiPool = pool;
-  }
-
-  return pool;
+  return globalThis.__glpiPool;
 }
