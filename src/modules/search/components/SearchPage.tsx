@@ -17,6 +17,8 @@ interface SearchPageProps {
 }
 
 export function SearchPage({ context, department }: SearchPageProps) {
+  const [searchFocused, setSearchFocused] = React.useState(false);
+
   const {
     searchInput,
     setSearchInput,
@@ -58,30 +60,48 @@ export function SearchPage({ context, department }: SearchPageProps) {
 
   return (
     <div className={`custom-scrollbar relative flex h-screen flex-col overflow-y-auto ${themeClass}`}>
-      <header className="z-10 px-6 pb-12 pt-20 text-center">
+      <header className="z-10 px-6 pb-8 pt-16 text-center md:pb-10 md:pt-20">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
+          className="space-y-4"
         >
-          <div className="mb-8 flex justify-center">
-            <div className="glow-premium relative mb-2 h-24 w-24 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
-              <Image
-                src="/assets/branding/brasao_rs.svg"
-                alt="Brasao Oficial RS"
-                fill
-                className="object-contain"
-              />
+          <motion.div
+            initial={false}
+            animate={
+              searchFocused
+                ? { opacity: 0, y: -80, height: 0, marginBottom: 0 }
+                : { opacity: 1, y: 0, height: "auto", marginBottom: 16 }
+            }
+            transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
+            className="overflow-hidden"
+            aria-hidden={searchFocused}
+          >
+            <div className="mb-8 flex justify-center">
+              <div className="glow-premium relative mb-2 h-24 w-24 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
+                <Image
+                  src="/assets/branding/brasao_rs.svg"
+                  alt="Brasao Oficial RS"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </div>
-          </div>
-          <h1 className="mb-2 text-3xl font-black uppercase italic tracking-tight text-white md:text-5xl">
-            {headerTitle}
-          </h1>
-          <p className="mb-12 text-[12px] font-bold uppercase tracking-[0.4em] text-text-3 opacity-60">
-            {headerSubtitle}
-          </p>
+            <h1 className="mb-2 text-3xl font-black uppercase italic tracking-tight text-white md:text-5xl">
+              {headerTitle}
+            </h1>
+            <p className="mb-10 text-[12px] font-bold uppercase tracking-[0.4em] text-text-3 opacity-60">
+              {headerSubtitle}
+            </p>
+          </motion.div>
 
-          <SearchInput value={searchInput} onChange={setSearchInput} className="mb-4" />
+          <SearchInput
+            value={searchInput}
+            onChange={setSearchInput}
+            onFocusChange={setSearchFocused}
+            className={searchFocused ? "mb-1" : "mb-4"}
+          />
         </motion.div>
       </header>
 

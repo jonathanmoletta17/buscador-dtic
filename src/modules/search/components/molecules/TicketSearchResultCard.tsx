@@ -98,47 +98,52 @@ function buildDescriptionPreview(value: string): { preview: string; truncated: b
   };
 }
 
+function normalizeHierarchySegment(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
 function splitEntityHierarchy(value: string): string[] {
   const delimiters = [/\s*>\s*/, /\s*\/\s*/, /\s*\|\s*/, /\s*»\s*/, /\s*::\s*/];
   for (const delimiter of delimiters) {
-    const segments = value
+    const parts = value
       .split(delimiter)
-      .map((segment) => segment.trim())
+      .map((part) => part.trim())
       .filter(Boolean);
-    if (segments.length > 1) {
-      return segments;
+    if (parts.length > 1) {
+      return parts;
     }
   }
-
   return [value.trim()].filter(Boolean);
 }
 
-const EntityHierarchyValue: React.FC<{ value: string }> = ({ value }) => {
-  const [expanded, setExpanded] = useState(false);
+function formatEntityDisplay(rawValue: string): string {
+  const segments = splitEntityHierarchy(rawValue);
+  if (segments.length <= 1) {
+    return segments[0] || rawValue;
+  }
 
-  const segments = useMemo(() => splitEntityHierarchy(value), [value]);
-  const hiddenLevels = Math.max(segments.length - 3, 0);
-  const collapsedText = segments.length > 3
-    ? `${segments[0]} > ... > ${segments.slice(-2).join(" > ")}`
-    : segments.join(" > ");
+  const removableSegments = new Set([
+    "entidade raiz",
+    "piratini",
+    "central de atendimento",
+  ]);
 
-  return (
-    <div className="space-y-1.5">
-      <div className="break-words text-[11px] font-semibold leading-snug text-text-1" title={segments.join(" > ")}>
-        {expanded ? segments.join(" > ") : collapsedText}
-      </div>
-      {hiddenLevels > 0 && (
-        <button
-          type="button"
-          onClick={() => setExpanded((current) => !current)}
-          className="text-[9px] font-bold uppercase tracking-widest text-accent-blue transition-colors hover:text-white"
-        >
-          {expanded ? "Recolher hierarquia" : `Ver hierarquia completa (+${hiddenLevels} niveis)`}
-        </button>
-      )}
-    </div>
-  );
-};
+  const normalizedSegments = [...segments];
+  while (normalizedSegments.length > 1) {
+    const first = normalizeHierarchySegment(normalizedSegments[0]);
+    if (!removableSegments.has(first)) {
+      break;
+    }
+    normalizedSegments.shift();
+  }
+
+  return normalizedSegments.join(" > ") || rawValue;
+}
 
 export const TicketSearchResultCard: React.FC<TicketSearchResultCardProps> = ({
   ticket,
@@ -156,6 +161,7 @@ export const TicketSearchResultCard: React.FC<TicketSearchResultCardProps> = ({
   const universeLabel = universe === "historical" ? "Historico" : "Operacional";
   const matchLabel = ticket.matchSource ? MATCH_SOURCE_LABELS[ticket.matchSource] || ticket.matchSource : null;
   const entityValue = ticket.entityName || ticket.entity_name || "Central de Atendimentos";
+  const entityDisplay = useMemo(() => formatEntityDisplay(entityValue), [entityValue]);
   const normalizedDescription = useMemo(() => normalizeTicketText(ticket.content), [ticket.content]);
   const descriptionPreview = useMemo(() => buildDescriptionPreview(normalizedDescription), [normalizedDescription]);
   const displayedDescription = showFullDescription || !descriptionPreview.truncated
@@ -200,9 +206,7 @@ export const TicketSearchResultCard: React.FC<TicketSearchResultCardProps> = ({
         </div>
 
         <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-5">
-          <MetaItem icon={Building2} label="Entidade">
-            <EntityHierarchyValue value={entityValue} />
-          </MetaItem>
+          <MetaItem icon={Building2} label="Entidade" value={entityDisplay} truncate />
           <MetaItem icon={Tag} label="Categoria" value={ticket.category} />
           <MetaItem icon={User} label="Requerente" value={ticket.requester} />
           <MetaItem icon={UserCog} label="Tecnico" value={ticket.technician || "Aguardando"} />
@@ -275,16 +279,23 @@ interface MetaItemProps {
   label: string;
   value?: string;
   children?: React.ReactNode;
+  truncate?: boolean;
 }
 
-const MetaItem: React.FC<MetaItemProps> = ({ icon: Icon, label, value, children }) => (
+const MetaItem: React.FC<MetaItemProps> = ({ icon: Icon, label, value, children, truncate = false }) => (
   <div className="flex flex-col gap-1.5 rounded-lg border border-white/[0.03] bg-surface-2/40 p-3">
     <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-widest text-text-3 opacity-60">
       <Icon size={12} />
       {label}
     </div>
     {children || (
-      <div className="break-words text-[11px] font-semibold leading-snug text-text-1" title={value}>
+      <div
+        className={[
+          "text-[11px] font-semibold leading-snug text-text-1",
+          truncate ? "truncate" : "break-words",
+        ].join(" ")}
+        title={value}
+      >
         {value || "---"}
       </div>
     )}

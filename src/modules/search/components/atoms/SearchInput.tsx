@@ -8,13 +8,15 @@ interface SearchInputProps {
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  onFocusChange?: (focused: boolean) => void;
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({
   value,
   onChange,
   placeholder = "Pesquisar chamados...",
-  className = ""
+  className = "",
+  onFocusChange,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -42,6 +44,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         ref={inputRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onFocus={() => onFocusChange?.(true)}
+        onBlur={() => onFocusChange?.(false)}
         placeholder={placeholder}
         icon={<Search size={18} />}
         className="pr-12"

@@ -60,7 +60,7 @@ function SegmentedButton<T extends string>({
       type="button"
       onClick={() => onSelect(value)}
       className={[
-        "rounded-lg px-3 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition-all",
+        "whitespace-nowrap rounded-lg px-3 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition-all",
         active
           ? "bg-accent-blue text-white shadow-[0_0_16px_rgba(59,130,246,0.24)]"
           : "text-text-3 hover:bg-white/5 hover:text-text-1",
@@ -142,27 +142,27 @@ export function SearchControls({
   return (
     <GlassCard className="border-white/6 p-5 md:p-6">
       <div className="space-y-5">
-        <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(280px,320px)] xl:items-end">
-          <section className="space-y-3">
+        <section className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+          <div className="space-y-4 rounded-2xl border border-white/8 bg-surface-1/45 p-4 sm:p-5">
             <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.26em] text-text-3">
               <CalendarRange size={14} />
               Periodo
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              {(["7d", "30d", "90d", "custom"] as PeriodPreset[]).map((preset) => (
-                <SegmentedButton
-                  key={preset}
-                  value={preset}
-                  currentValue={periodPreset}
-                  onSelect={onPeriodPresetChange}
-                >
-                  {preset === "custom" ? "Custom" : preset}
-                </SegmentedButton>
-              ))}
-            </div>
+            <div className="grid gap-3 lg:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+              <div className="flex flex-wrap items-center gap-2">
+                {(["7d", "30d", "90d", "custom"] as PeriodPreset[]).map((preset) => (
+                  <SegmentedButton
+                    key={preset}
+                    value={preset}
+                    currentValue={periodPreset}
+                    onSelect={onPeriodPresetChange}
+                  >
+                    {preset === "custom" ? "Custom" : preset}
+                  </SegmentedButton>
+                ))}
+              </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
               <label className="space-y-2">
                 <span className="block text-[10px] font-bold uppercase tracking-[0.22em] text-text-3">
                   Data inicial
@@ -193,20 +193,22 @@ export function SearchControls({
                 {periodError}
               </p>
             )}
-          </section>
+          </div>
 
-          <section className="space-y-3">
-            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.26em] text-text-3">
-              <Layers3 size={14} />
-              Profundidade
-            </div>
-            <div className="inline-flex rounded-xl border border-white/8 bg-surface-1 p-1">
-              <SegmentedButton value="basic" currentValue={depth} onSelect={onDepthChange}>
-                Busca basica
-              </SegmentedButton>
-              <SegmentedButton value="expanded" currentValue={depth} onSelect={onDepthChange}>
-                Busca expandida
-              </SegmentedButton>
+          <div className="space-y-4 rounded-2xl border border-white/8 bg-surface-1/45 p-4 sm:p-5">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.26em] text-text-3">
+                <Layers3 size={14} />
+                Profundidade
+              </div>
+              <div className="inline-flex rounded-xl border border-white/8 bg-surface-1 p-1">
+                <SegmentedButton value="basic" currentValue={depth} onSelect={onDepthChange}>
+                  Busca basica
+                </SegmentedButton>
+                <SegmentedButton value="expanded" currentValue={depth} onSelect={onDepthChange}>
+                  Busca expandida
+                </SegmentedButton>
+              </div>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
@@ -232,66 +234,70 @@ export function SearchControls({
                 Limpar filtros
               </button>
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
 
         {advancedOpen && (
-          <section className="grid gap-4 border-t border-white/8 pt-5 md:grid-cols-2 xl:grid-cols-3">
-            <div className="space-y-3 md:col-span-2 xl:col-span-3">
-              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-text-3">
-                <Layers3 size={14} />
-                Escopo Dos Chamados
+          <section className="space-y-4 rounded-2xl border border-white/8 bg-surface-1/35 p-4 sm:p-5">
+            <div className="grid gap-4 xl:grid-cols-[minmax(220px,280px)_minmax(0,1fr)] xl:items-start">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-text-3">
+                  <Layers3 size={14} />
+                  Escopo dos chamados
+                </div>
+                <div className="inline-flex rounded-xl border border-white/8 bg-surface-1 p-1">
+                  <SegmentedButton value="historical" currentValue={universe} onSelect={onUniverseChange}>
+                    Historico
+                  </SegmentedButton>
+                  <SegmentedButton value="active" currentValue={universe} onSelect={onUniverseChange}>
+                    Operacional
+                  </SegmentedButton>
+                </div>
               </div>
-              <div className="inline-flex rounded-xl border border-white/8 bg-surface-1 p-1">
-                <SegmentedButton value="historical" currentValue={universe} onSelect={onUniverseChange}>
-                  Historico
-                </SegmentedButton>
-                <SegmentedButton value="active" currentValue={universe} onSelect={onUniverseChange}>
-                  Operacional
-                </SegmentedButton>
+
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <FilterSelect
+                  label="Entidade"
+                  value={entityId}
+                  onChange={onEntityChange}
+                  options={filterOptions?.entities ?? []}
+                  placeholder="Todas as entidades"
+                  disabled={advancedDisabled}
+                />
+                <FilterSelect
+                  label="Categoria"
+                  value={categoryId}
+                  onChange={onCategoryChange}
+                  options={filterOptions?.categories ?? []}
+                  placeholder="Todas as categorias"
+                  disabled={advancedDisabled}
+                />
+                <FilterSelect
+                  label="Local"
+                  value={locationId}
+                  onChange={onLocationChange}
+                  options={filterOptions?.locations ?? []}
+                  placeholder="Todos os locais"
+                  disabled={advancedDisabled}
+                />
+                <FilterSelect
+                  label="Grupo"
+                  value={groupId}
+                  onChange={onGroupChange}
+                  options={filterOptions?.groups ?? []}
+                  placeholder="Todos os grupos"
+                  disabled={advancedDisabled}
+                />
+                <FilterSelect
+                  label="Tecnico"
+                  value={technicianId}
+                  onChange={onTechnicianChange}
+                  options={filterOptions?.technicians ?? []}
+                  placeholder="Todos os tecnicos"
+                  disabled={advancedDisabled}
+                />
               </div>
             </div>
-
-            <FilterSelect
-              label="Entidade"
-              value={entityId}
-              onChange={onEntityChange}
-              options={filterOptions?.entities ?? []}
-              placeholder="Todas as entidades"
-              disabled={advancedDisabled}
-            />
-            <FilterSelect
-              label="Categoria"
-              value={categoryId}
-              onChange={onCategoryChange}
-              options={filterOptions?.categories ?? []}
-              placeholder="Todas as categorias"
-              disabled={advancedDisabled}
-            />
-            <FilterSelect
-              label="Local"
-              value={locationId}
-              onChange={onLocationChange}
-              options={filterOptions?.locations ?? []}
-              placeholder="Todos os locais"
-              disabled={advancedDisabled}
-            />
-            <FilterSelect
-              label="Grupo"
-              value={groupId}
-              onChange={onGroupChange}
-              options={filterOptions?.groups ?? []}
-              placeholder="Todos os grupos"
-              disabled={advancedDisabled}
-            />
-            <FilterSelect
-              label="Tecnico"
-              value={technicianId}
-              onChange={onTechnicianChange}
-              options={filterOptions?.technicians ?? []}
-              placeholder="Todos os tecnicos"
-              disabled={advancedDisabled}
-            />
           </section>
         )}
       </div>
