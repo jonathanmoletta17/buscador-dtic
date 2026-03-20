@@ -28,7 +28,7 @@ export const PremiumButton = ({
   const variants = {
     primary: "bg-accent-blue text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:brightness-110 active:scale-[0.98]",
     secondary: "bg-surface-3 text-text-1 border border-border-1 hover:bg-surface-4 active:scale-[0.98]",
-    ghost: "bg-transparent text-text-2 hover:text-text-1 hover:bg-white/5",
+    ghost: "bg-transparent text-text-2 hover:text-text-1 hover:bg-overlay-1",
   };
 
   return (
@@ -37,7 +37,7 @@ export const PremiumButton = ({
         "relative font-semibold transition-all duration-200 overflow-hidden group flex items-center justify-center gap-2",
         variants[variant],
         sizeClasses[size],
-        "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:-translate-x-full hover:before:animate-[shimmer_1.5s_infinite]",
+        "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-overlay-2 before:to-transparent before:-translate-x-full hover:before:animate-[shimmer_1.5s_infinite]",
         className
       )}
       {...props}

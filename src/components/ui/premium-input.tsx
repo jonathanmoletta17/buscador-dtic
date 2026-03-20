@@ -29,7 +29,7 @@ export const PremiumInput = React.forwardRef<HTMLInputElement, InputProps>(({
         <input 
           ref={ref}
           className={cn(
-            "w-full bg-surface-2 border border-white/5 rounded-xl py-3 px-4 outline-none transition-all duration-200",
+            "w-full bg-surface-2 border border-border-1 rounded-xl py-3 px-4 outline-none transition-all duration-200",
             "text-text-1 placeholder:text-text-3",
             "focus:border-accent-blue/50 focus:bg-surface-3 focus:shadow-[0_0_12px_rgba(59,130,246,0.1)]",
             icon && "pl-12",

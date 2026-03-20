@@ -63,7 +63,7 @@ function SegmentedButton<T extends string>({
         "whitespace-nowrap rounded-lg px-3 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition-all",
         active
           ? "bg-accent-blue text-white shadow-[0_0_16px_rgba(59,130,246,0.24)]"
-          : "text-text-3 hover:bg-white/5 hover:text-text-1",
+          : "text-text-3 hover:bg-overlay-1 hover:text-text-1",
       ].join(" ")}
     >
       {children}
@@ -95,7 +95,7 @@ function FilterSelect({
         value={value ?? ""}
         onChange={(event) => onChange(parseSelectInteger(event.target.value))}
         disabled={disabled}
-        className="w-full rounded-xl border border-white/8 bg-surface-2 px-3 py-3 text-sm text-text-1 outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-50 focus:border-accent-blue/60"
+        className="w-full rounded-xl border border-border-1 bg-surface-2 px-3 py-3 text-sm text-text-1 outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-50 focus:border-accent-blue/60"
       >
         <option value="">{placeholder}</option>
         {options.map((option) => (
@@ -140,10 +140,10 @@ export function SearchControls({
   const advancedDisabled = filterOptionsLoading || !filterOptions;
 
   return (
-    <GlassCard className="border-white/6 p-5 md:p-6">
+    <GlassCard className="border-border-1 p-5 md:p-6">
       <div className="space-y-5">
         <section className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-          <div className="space-y-4 rounded-2xl border border-white/8 bg-surface-1/45 p-4 sm:p-5">
+          <div className="space-y-4 rounded-2xl border border-border-1 bg-surface-1/45 p-4 sm:p-5">
             <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.26em] text-text-3">
               <CalendarRange size={14} />
               Periodo
@@ -171,7 +171,7 @@ export function SearchControls({
                   type="date"
                   value={dateFrom}
                   onChange={(event) => onDateFromChange(event.target.value)}
-                  className="w-full rounded-xl border border-white/8 bg-surface-2 px-3 py-3 text-sm text-text-1 outline-none transition-colors focus:border-accent-blue/60"
+                  className="w-full rounded-xl border border-border-1 bg-surface-2 px-3 py-3 text-sm text-text-1 outline-none transition-colors focus:border-accent-blue/60"
                 />
               </label>
 
@@ -183,25 +183,25 @@ export function SearchControls({
                   type="date"
                   value={dateTo}
                   onChange={(event) => onDateToChange(event.target.value)}
-                  className="w-full rounded-xl border border-white/8 bg-surface-2 px-3 py-3 text-sm text-text-1 outline-none transition-colors focus:border-accent-blue/60"
+                  className="w-full rounded-xl border border-border-1 bg-surface-2 px-3 py-3 text-sm text-text-1 outline-none transition-colors focus:border-accent-blue/60"
                 />
               </label>
             </div>
 
             {periodError && (
-              <p className="rounded-xl border border-red-400/40 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+              <p className="rounded-xl border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger">
                 {periodError}
               </p>
             )}
           </div>
 
-          <div className="space-y-4 rounded-2xl border border-white/8 bg-surface-1/45 p-4 sm:p-5">
+          <div className="space-y-4 rounded-2xl border border-border-1 bg-surface-1/45 p-4 sm:p-5">
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.26em] text-text-3">
                 <Layers3 size={14} />
                 Profundidade
               </div>
-              <div className="inline-flex rounded-xl border border-white/8 bg-surface-1 p-1">
+              <div className="inline-flex rounded-xl border border-border-1 bg-surface-1 p-1">
                 <SegmentedButton value="basic" currentValue={depth} onSelect={onDepthChange}>
                   Busca basica
                 </SegmentedButton>
@@ -215,7 +215,7 @@ export function SearchControls({
               <button
                 type="button"
                 onClick={() => onAdvancedToggle(!advancedOpen)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/8 bg-surface-1 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-text-2 transition-colors hover:border-white/15 hover:text-text-1"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border-1 bg-surface-1 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-text-2 transition-colors hover:border-border-2 hover:text-text-1"
               >
                 <SlidersHorizontal size={14} />
                 Filtros
@@ -229,7 +229,7 @@ export function SearchControls({
               <button
                 type="button"
                 onClick={onResetFilters}
-                className="rounded-xl border border-white/8 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-text-3 transition-colors hover:border-white/15 hover:text-text-1"
+                className="rounded-xl border border-border-1 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-text-3 transition-colors hover:border-border-2 hover:text-text-1"
               >
                 Limpar filtros
               </button>
@@ -238,14 +238,14 @@ export function SearchControls({
         </section>
 
         {advancedOpen && (
-          <section className="space-y-4 rounded-2xl border border-white/8 bg-surface-1/35 p-4 sm:p-5">
+          <section className="space-y-4 rounded-2xl border border-border-1 bg-surface-1/35 p-4 sm:p-5">
             <div className="grid gap-4 xl:grid-cols-[minmax(220px,280px)_minmax(0,1fr)] xl:items-start">
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-text-3">
                   <Layers3 size={14} />
                   Escopo dos chamados
                 </div>
-                <div className="inline-flex rounded-xl border border-white/8 bg-surface-1 p-1">
+                <div className="inline-flex rounded-xl border border-border-1 bg-surface-1 p-1">
                   <SegmentedButton value="historical" currentValue={universe} onSelect={onUniverseChange}>
                     Historico
                   </SegmentedButton>

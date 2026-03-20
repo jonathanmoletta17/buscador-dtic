@@ -169,7 +169,7 @@ export const TicketSearchResultCard: React.FC<TicketSearchResultCardProps> = ({
     : descriptionPreview.preview;
 
   return (
-    <GlassCard className="group/card overflow-hidden border-white/5 p-0 transition-colors hover:border-white/10">
+    <GlassCard className="group/card overflow-hidden border-border-1 p-0 transition-colors hover:border-border-2">
       <div className="p-6 pb-4">
         <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-3">
@@ -179,7 +179,7 @@ export const TicketSearchResultCard: React.FC<TicketSearchResultCardProps> = ({
               {ticket.requestType && <Badge variant="orange">{ticket.requestType}</Badge>}
               {depth === "expanded" && matchLabel && <Badge variant="success">Match: {matchLabel}</Badge>}
             </div>
-            <h3 className="text-lg font-bold text-text-1 transition-colors group-hover/card:text-white">
+            <h3 className="text-lg font-bold text-text-1 transition-colors group-hover/card:text-text-1">
               {ticket.title}
             </h3>
           </div>
@@ -194,7 +194,7 @@ export const TicketSearchResultCard: React.FC<TicketSearchResultCardProps> = ({
         </div>
 
         <div className="mb-6 flex flex-wrap items-center gap-2 text-[9px] font-bold uppercase tracking-[0.2em] text-text-3">
-          <span className="rounded bg-white/5 px-2 py-0.5">GLPI {context.toUpperCase()}</span>
+          <span className="rounded bg-overlay-1 px-2 py-0.5">GLPI {context.toUpperCase()}</span>
           <span className="opacity-40">-</span>
           <span className="opacity-60">Modificado em {formatDate(ticket.dateModified)}</span>
           {ticket.location && (
@@ -223,7 +223,7 @@ export const TicketSearchResultCard: React.FC<TicketSearchResultCardProps> = ({
           </div>
         )}
 
-        <div className="relative mb-6 rounded-lg border border-white/5 bg-surface-0/50 p-4">
+        <div className="relative mb-6 rounded-lg border border-border-1 bg-surface-0/50 p-4">
           <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-text-3">
             Descricao do Problema
           </div>
@@ -235,7 +235,7 @@ export const TicketSearchResultCard: React.FC<TicketSearchResultCardProps> = ({
             <button
               type="button"
               onClick={() => setShowFullDescription((current) => !current)}
-              className="mt-3 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-accent-blue transition-colors hover:text-white"
+              className="mt-3 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-accent-blue transition-colors hover:text-text-1"
             >
               {showFullDescription ? (
                 <>
@@ -252,7 +252,7 @@ export const TicketSearchResultCard: React.FC<TicketSearchResultCardProps> = ({
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-white/5 pt-4">
+        <div className="flex items-center justify-between border-t border-border-1 pt-4">
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-text-3">Prioridade:</span>
             <span className="text-[10px] font-bold uppercase text-warning">{ticket.urgency || "Media"}</span>
@@ -283,7 +283,7 @@ interface MetaItemProps {
 }
 
 const MetaItem: React.FC<MetaItemProps> = ({ icon: Icon, label, value, children, truncate = false }) => (
-  <div className="flex flex-col gap-1.5 rounded-lg border border-white/[0.03] bg-surface-2/40 p-3">
+  <div className="flex flex-col gap-1.5 rounded-lg border border-border-1 bg-surface-2/40 p-3">
     <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-widest text-text-3 opacity-60">
       <Icon size={12} />
       {label}

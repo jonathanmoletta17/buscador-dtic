@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { useTicketsSearch } from "../hooks/useTicketsSearch";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { SearchInput } from "./atoms/SearchInput";
 import { KPIGrid } from "./organisms/KPIGrid";
 import { TicketList } from "./organisms/TicketList";
@@ -60,6 +61,10 @@ export function SearchPage({ context, department }: SearchPageProps) {
 
   return (
     <div className={`custom-scrollbar relative flex h-screen flex-col overflow-y-auto ${themeClass}`}>
+      <div className="absolute right-6 top-6 z-20">
+        <ThemeToggle />
+      </div>
+
       <header className="z-10 px-6 pb-8 pt-16 text-center md:pb-10 md:pt-20">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -88,7 +93,7 @@ export function SearchPage({ context, department }: SearchPageProps) {
                 />
               </div>
             </div>
-            <h1 className="mb-2 text-3xl font-black uppercase italic tracking-tight text-white md:text-5xl">
+            <h1 className="mb-2 text-3xl font-black uppercase italic tracking-tight text-text-1 md:text-5xl">
               {headerTitle}
             </h1>
             <p className="mb-10 text-[12px] font-bold uppercase tracking-[0.4em] text-text-3 opacity-60">

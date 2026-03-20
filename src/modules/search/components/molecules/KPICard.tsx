@@ -40,7 +40,7 @@ export const KPICard: React.FC<KPICardProps> = ({
       <GlassCard className={`
         relative overflow-hidden p-6 h-32 flex flex-col justify-between
         bg-gradient-to-br ${variants[variant]}
-        ${selected ? 'border-opacity-100 ring-2 ring-white/10' : 'border-opacity-30'}
+        ${selected ? 'border-opacity-100 ring-2 ring-border-2' : 'border-opacity-30'}
       `}>
         <div className="flex justify-between items-start">
           <Icon size={20} className="opacity-80" />

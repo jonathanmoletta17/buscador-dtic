@@ -12,7 +12,7 @@ export const Badge: React.FC<BadgeProps> = ({
   className = "" 
 }) => {
   const variants = {
-    default: 'bg-surface-3 text-text-2 border-white/10',
+    default: 'bg-surface-3 text-text-2 border-border-1',
     success: 'bg-success/10 text-success border-success/20',
     warning: 'bg-warning/10 text-warning border-warning/20',
     danger: 'bg-danger/10 text-danger border-danger/20',

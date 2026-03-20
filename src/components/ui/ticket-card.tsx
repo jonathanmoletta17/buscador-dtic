@@ -17,10 +17,10 @@ interface TicketCardProps {
 }
 
 const statusTextColors: Record<string, string> = {
-  info: "text-blue-400/80",
-  warning: "text-amber-400/80",
-  danger: "text-red-400/80",
-  success: "text-emerald-400/80",
+  info: "text-info/80",
+  warning: "text-warning/80",
+  danger: "text-danger/80",
+  success: "text-success/80",
   neutral: "text-text-3",
 };
 
@@ -40,7 +40,7 @@ export function TicketCard({
   return (
     <button
       onClick={onClick}
-      className="group/card w-full text-left rounded-lg bg-surface-2 border border-white/[0.06] hover:bg-surface-3 hover:border-white/[0.10] transition-all duration-200 cursor-pointer p-4"
+      className="group/card w-full cursor-pointer rounded-lg border border-border-1 bg-surface-2 p-4 text-left transition-all duration-200 hover:border-border-2 hover:bg-surface-3"
     >
       {/* Top Row: ID + SLA */}
       <div className="flex items-center justify-between gap-2 mb-2">
@@ -48,7 +48,7 @@ export function TicketCard({
           {id}
         </span>
         {sla && (
-          <span className={`text-[12px] font-mono flex items-center gap-1 shrink-0 ${isCriticalSla ? "text-red-400" : "text-text-3/60"}`}>
+          <span className={`text-[12px] font-mono flex items-center gap-1 shrink-0 ${isCriticalSla ? "text-danger" : "text-text-3/60"}`}>
             {slaLevel === "expired" ? <AlertTriangle size={11} /> : <Clock size={11} />}
             {sla}
           </span>
@@ -56,7 +56,7 @@ export function TicketCard({
       </div>
 
       {/* Title */}
-      <h4 className="text-[15px] font-semibold text-text-1 group-hover/card:text-white transition-colors leading-snug mb-1.5 line-clamp-2">
+      <h4 className="mb-1.5 line-clamp-2 text-[15px] font-semibold leading-snug text-text-1 transition-colors group-hover/card:text-text-1">
         {decodeHtmlEntities(title)}
       </h4>
 
@@ -68,7 +68,7 @@ export function TicketCard({
       {/* Bottom Row: Category + Status */}
       <div className="flex items-center justify-between gap-2">
         {category && (
-          <span className="text-[11px] font-medium text-text-3/50 bg-white/[0.04] px-2 py-0.5 rounded uppercase tracking-wider">
+          <span className="rounded bg-overlay-1 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wider text-text-3/50">
             {category}
           </span>
         )}

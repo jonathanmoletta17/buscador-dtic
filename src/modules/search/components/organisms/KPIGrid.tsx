@@ -49,7 +49,7 @@ export const KPIGrid: React.FC<KPIGridProps> = ({
     return (
       <div className={`grid gap-6 ${showClosed ? "grid-cols-1 md:grid-cols-5" : "grid-cols-2 md:grid-cols-4"}`}>
         {[...Array(items.length || 4)].map((_, index) => (
-          <div key={index} className="h-32 rounded-2xl border border-white/5 bg-surface-2 animate-pulse" />
+          <div key={index} className="h-32 animate-pulse rounded-2xl border border-border-1 bg-surface-2" />
         ))}
       </div>
     );
