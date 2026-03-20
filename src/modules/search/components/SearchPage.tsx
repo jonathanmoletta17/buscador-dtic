@@ -1,12 +1,15 @@
-"use client";
+﻿"use client";
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTicketsSearch } from '../hooks/useTicketsSearch';
-import { SearchInput } from './atoms/SearchInput';
-import { KPIGrid } from './organisms/KPIGrid';
-import { TicketList } from './organisms/TicketList';
+import React from "react";
 import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
+
+import { useTicketsSearch } from "../hooks/useTicketsSearch";
+import { SearchInput } from "./atoms/SearchInput";
+import { KPIGrid } from "./organisms/KPIGrid";
+import { TicketList } from "./organisms/TicketList";
+import { SearchControls } from "./organisms/SearchControls";
+import { ActiveFilterChips } from "./organisms/ActiveFilterChips";
 
 interface SearchPageProps {
   context: string;
@@ -22,73 +25,133 @@ export function SearchPage({ context, department }: SearchPageProps) {
     tickets,
     totalCount,
     stats,
+    filterOptions,
+    filterOptionsLoading,
+    periodError,
+    resultMeta,
+    summaryLabel,
     filters,
+    pagination,
   } = useTicketsSearch({
     context,
     department,
-    debounceMs: 300
+    debounceMs: 300,
   });
 
-  const themeClass = department === 'conservacao' ? 'theme-memoria' : (department === 'manutencao' || context === 'sis' ? 'theme-manutencao' : 'theme-dtic');
+  const themeClass = department === "conservacao"
+    ? "theme-memoria"
+    : department === "manutencao" || context === "sis"
+      ? "theme-manutencao"
+      : "theme-dtic";
+
+  const headerTitle = department === "dtic" || context === "dtic"
+    ? "Buscador DTIC"
+    : department === "manutencao"
+      ? "Buscador SIS - Manutencao"
+      : "Buscador SIS - Conservacao";
+
+  const headerSubtitle = department === "dtic" || context === "dtic"
+    ? "Central de Atendimento ao Usuario - Busca de chamados DTIC"
+    : department === "manutencao"
+      ? "Central de Atendimento ao Usuario - Busca de chamados SIS Manutencao"
+      : "Central de Atendimento ao Usuario - Busca de chamados SIS Conservacao";
 
   return (
-    <div className={`h-screen overflow-y-auto custom-scrollbar relative flex flex-col ${themeClass}`}>
-      {/* Search Header Section */}
-      <header className="pt-20 pb-16 px-6 text-center z-10">
+    <div className={`custom-scrollbar relative flex h-screen flex-col overflow-y-auto ${themeClass}`}>
+      <header className="z-10 px-6 pb-12 pt-20 text-center">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <div className="flex justify-center mb-8">
-             <div className="w-24 h-24 relative mb-2 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)] glow-premium">
-              <Image 
-                  src="/assets/branding/brasao_rs.svg" 
-                  alt="Brasão Oficial RS" 
-                  fill
-                  className="object-contain"
-                />
-             </div>
+          <div className="mb-8 flex justify-center">
+            <div className="glow-premium relative mb-2 h-24 w-24 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
+              <Image
+                src="/assets/branding/brasao_rs.svg"
+                alt="Brasao Oficial RS"
+                fill
+                className="object-contain"
+              />
+            </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-2 uppercase italic">
-            GLPI <span className="text-accent-blue">Smart</span> Search
+          <h1 className="mb-2 text-3xl font-black uppercase italic tracking-tight text-white md:text-5xl">
+            {headerTitle}
           </h1>
-          <p className="text-[12px] font-bold text-text-3 uppercase tracking-[0.4em] mb-12 opacity-60">
-            Central de Atendimento ao Usuário • Sistema de Busca Inteligente
+          <p className="mb-12 text-[12px] font-bold uppercase tracking-[0.4em] text-text-3 opacity-60">
+            {headerSubtitle}
           </p>
-          
-          <SearchInput 
-            value={searchInput} 
-            onChange={setSearchInput}
-            className="mb-4"
-          />
+
+          <SearchInput value={searchInput} onChange={setSearchInput} className="mb-4" />
         </motion.div>
       </header>
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 pb-20 z-10 space-y-16">
-        {/* Statistics Grid */}
+      <main className="z-10 mx-auto flex-1 w-full max-w-7xl space-y-10 px-6 pb-20">
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+        >
+          <SearchControls
+            universe={filters.universe}
+            onUniverseChange={filters.setUniverse}
+            depth={filters.depth}
+            onDepthChange={filters.setDepth}
+            periodPreset={filters.periodPreset}
+            onPeriodPresetChange={filters.setPeriodPreset}
+            dateFrom={filters.dateFrom}
+            onDateFromChange={filters.setDateFrom}
+            dateTo={filters.dateTo}
+            onDateToChange={filters.setDateTo}
+            periodError={periodError}
+            filterOptions={filterOptions}
+            filterOptionsLoading={filterOptionsLoading}
+            advancedOpen={filters.advancedOpen}
+            onAdvancedToggle={filters.setAdvancedOpen}
+            activeAdvancedCount={filters.activeAdvancedCount}
+            entityId={filters.entityId}
+            onEntityChange={filters.setEntityId}
+            categoryId={filters.categoryId}
+            onCategoryChange={filters.setCategoryId}
+            locationId={filters.locationId}
+            onLocationChange={filters.setLocationId}
+            groupId={filters.groupId}
+            onGroupChange={filters.setGroupId}
+            technicianId={filters.technicianId}
+            onTechnicianChange={filters.setTechnicianId}
+            onResetFilters={filters.resetAllFilters}
+          />
+        </motion.section>
+
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <KPIGrid 
+          <KPIGrid
             stats={stats}
             selectedStatusId={filters.selectedStatusId}
             onStatusChange={filters.setSelectedStatusId}
             isLoading={loading}
+            showClosed={filters.universe === "historical"}
           />
         </motion.section>
 
-        {/* Results Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.15 }}
+        >
+          <ActiveFilterChips chips={filters.activeFilterChips} />
+        </motion.section>
+
         <section className="relative">
           <AnimatePresence mode="wait">
             {searching && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute -top-6 left-0 text-[10px] text-accent-blue animate-pulse font-bold tracking-widest uppercase"
+                className="absolute -top-6 left-0 animate-pulse text-[10px] font-bold uppercase tracking-widest text-accent-blue"
               >
                 Pesquisando no banco de dados...
               </motion.div>
@@ -100,27 +163,35 @@ export function SearchPage({ context, department }: SearchPageProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <TicketList 
+            <TicketList
               tickets={tickets}
               totalCount={totalCount}
+              resultMeta={resultMeta}
               context={context}
+              universe={filters.universe}
+              depth={filters.depth}
+              summaryLabel={summaryLabel}
               sortBy={filters.sortBy}
               onSortChange={filters.setSortBy}
               isLoading={loading}
+              pagination={{
+                currentPage: pagination.currentPage,
+                totalPages: pagination.totalPages,
+                onPageChange: pagination.setCurrentPage,
+              }}
             />
           </motion.div>
         </section>
 
-        {/* Shortcut Legend */}
-        <motion.footer 
+        <motion.footer
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.4 }}
           transition={{ delay: 1 }}
-          className="flex justify-center gap-6 text-[10px] text-text-3 uppercase font-bold tracking-widest pt-10"
+          className="flex justify-center gap-6 pt-10 text-[10px] font-bold uppercase tracking-widest text-text-3"
         >
-           <span className="flex items-center gap-2">/ Focar busca</span>
-           <span className="flex items-center gap-2">Esc Limpar</span>
-           <span className="flex items-center gap-2">Alt+1/2 Ordenar</span>
+          <span className="flex items-center gap-2">/ Focar busca</span>
+          <span className="flex items-center gap-2">Esc Limpar</span>
+          <span className="flex items-center gap-2">Alt+1/2 Ordenar</span>
         </motion.footer>
       </main>
     </div>
