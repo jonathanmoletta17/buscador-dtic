@@ -16,8 +16,8 @@ function resolveTheme(): ThemeMode {
     return "dark";
   }
 
-  const fromDom = document.documentElement.dataset.theme;
-  if (isThemeMode(fromDom ?? null)) {
+  const fromDom = document.documentElement.dataset.theme ?? null;
+  if (isThemeMode(fromDom)) {
     return fromDom;
   }
 
