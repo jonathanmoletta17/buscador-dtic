@@ -195,12 +195,12 @@ export const TicketSearchResultCard: React.FC<TicketSearchResultCardProps> = ({
 
         <div className="mb-6 flex flex-wrap items-center gap-2 text-[9px] font-bold uppercase tracking-[0.2em] text-text-3">
           <span className="rounded bg-overlay-1 px-2 py-0.5">GLPI {context.toUpperCase()}</span>
-          <span className="opacity-40">-</span>
-          <span className="opacity-60">Modificado em {formatDate(ticket.dateModified)}</span>
+          <span className="text-text-3/60">-</span>
+          <span className="text-text-2">Modificado em {formatDate(ticket.dateModified)}</span>
           {ticket.location && (
             <>
-              <span className="opacity-40">-</span>
-              <span className="opacity-60">{ticket.location}</span>
+              <span className="text-text-3/60">-</span>
+              <span className="text-text-2">{ticket.location}</span>
             </>
           )}
         </div>
@@ -284,7 +284,7 @@ interface MetaItemProps {
 
 const MetaItem: React.FC<MetaItemProps> = ({ icon: Icon, label, value, children, truncate = false }) => (
   <div className="flex flex-col gap-1.5 rounded-lg border border-border-1 bg-surface-2/40 p-3">
-    <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-widest text-text-3 opacity-60">
+    <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-widest text-text-3">
       <Icon size={12} />
       {label}
     </div>

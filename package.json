@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "check:theme-css": "node scripts/check-theme-css.mjs",
+    "build:validated": "npm run build && npm run check:theme-css",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest",

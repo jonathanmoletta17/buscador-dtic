@@ -1,6 +1,6 @@
 ﻿@import "tailwindcss";
 
-@theme inline {
+@theme {
   /* Dark surface defaults */
   --color-surface-0: oklch(14% 0.008 240);
   --color-surface-1: oklch(17% 0.008 240);
@@ -55,7 +55,7 @@
 
   --color-text-1: #0f172a;
   --color-text-2: #334155;
-  --color-text-3: #64748b;
+  --color-text-3: #526278;
 
   --color-border-1: rgba(15, 23, 42, 0.12);
   --color-border-2: rgba(15, 23, 42, 0.2);

@@ -96,7 +96,7 @@ export function SearchPage({ context, department }: SearchPageProps) {
             <h1 className="mb-2 text-3xl font-black uppercase italic tracking-tight text-text-1 md:text-5xl">
               {headerTitle}
             </h1>
-            <p className="mb-10 text-[12px] font-bold uppercase tracking-[0.4em] text-text-3 opacity-60">
+            <p className="mb-10 text-[12px] font-bold uppercase tracking-[0.4em] text-text-2">
               {headerSubtitle}
             </p>
           </motion.div>
